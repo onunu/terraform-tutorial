@@ -9,8 +9,14 @@ resource "aws_vpc" "vpc_tuter" {
 resource "aws_subnet" "vpc_tuter_subnet" {
   vpc_id = "${aws_vpc.vpc_tuter.id}"
   cidr_block = "10.0.0.0/24"
+  availability_zone = "us-west-2b"
 }
 
+resource "aws_subnet" "vpc_tuter_subnet_another" {
+  vpc_id = "${aws_vpc.vpc_tuter.id}"
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-west-2c"
+}
 resource "aws_internet_gateway" "vpc_tuter_gateway" {
   vpc_id = "${aws_vpc.vpc_tuter.id}"
 }
@@ -44,5 +50,12 @@ resource "aws_security_group" "vpc_tuter_security_group" {
     to_port = 22
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
   }
 }
